@@ -1,0 +1,8 @@
+:global(.homePopup){
+    background-image: url(/src/assets/images/dialog.png);
+}
+:global(.homePopup) :global(.close){
+    right: 14px;
+    top: 12px;
+}
+

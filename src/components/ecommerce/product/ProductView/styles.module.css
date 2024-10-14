@@ -1,0 +1,6 @@
+:global(.productSwiper) :global(.swiper-wrapper){
+    justify-content: center;
+}
+:global(.productSwiper) :global(.swiper-slide-thumb-active){
+    opacity: 100%;
+}

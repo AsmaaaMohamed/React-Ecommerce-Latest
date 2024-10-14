@@ -1,0 +1,22 @@
+:global(.singleFooterWized) .footersubscribeForm input {
+    height: 50px;
+    width: 100%;
+    border: 1px solid #E4E5EE;
+    border-radius: 4px;
+}
+:global(.singleFooterWized) .footersubscribeForm input:focus {
+    border: 1px solid var(--color-primary);
+    --tw-ring-offset-width:0
+}
+:global(.singleFooterWized) .footersubscribeForm button {
+    right: 10px;
+    height: 36px;
+    line-height: 0;
+    margin:0 !important
+}
+.socialOneWrapper ul li a:hover svg {
+    stroke: #fff;
+}
+.socialOneWrapper ul li a:hover svg.hasFill {
+    fill: #fff;
+}

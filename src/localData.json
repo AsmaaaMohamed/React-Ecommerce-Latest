@@ -1,0 +1,80 @@
+
+{
+  "languages" : [
+      {
+          "value": "en",
+          "label": "English"
+      },
+      {
+          "value": "it",
+          "label": "Italy"
+      },
+      {
+          "value": "ru",
+          "label": "Russian"
+      },
+      {
+          "value": "ch",
+          "label": "Chinese"
+      }
+  ],
+  "currencies" : [
+      {
+        "value": "usd",
+        "label": "USD"
+      },
+      {
+        "value": "rubol",
+        "label": "Rubol"
+      },
+      {
+        "value": "rubi",
+        "label": "Rubi"
+      },
+      {
+        "value": "euro",
+        "label": "Euro"
+      }
+    ],
+
+    "posts":[
+      {
+        "id": 1,
+        "title": "Shion Fixation: Fueling Your Passion for All Things Stylish",
+        "publish_date": "15 Sep, 2023",
+        "url": "#",
+        "cat_id": "1",
+        "img": "01.jpg"
+      },
+      {
+        "id": 2,
+        "title": "Shion Fixation: Fueling Your Passion for All Things Stylish",
+        "publish_date": "15 Sep, 2023",
+        "url": "#",
+        "cat_id": "1",
+        "img": "02.jpg"
+      },
+      {
+        "id": 3,
+        "title": "Shion Fixation: Fueling Your Passion for All Things Stylish",
+        "publish_date": "15 Sep, 2023",
+        "url": "#",
+        "cat_id": "1",
+        "img": "03.jpg"
+      },
+      {
+        "id": 4,
+        "title": "Shion Fixation: Fueling Your Passion for All Things Stylish",
+        "publish_date": "15 Sep, 2023",
+        "url": "#",
+        "cat_id": "1",
+        "img": "04.jpg"
+      }
+    ],
+    "posts_categories":[
+      {
+        "id":1,
+        "title":"Modern Fashion"
+      }
+    ]
+}

@@ -1,0 +1,31 @@
+/* Main Slider */
+:global(.category-area-main-wrapper-one) :global(.swiper-button-next),
+:global(.category-area-main-wrapper-one) :global(.swiper-button-prev){
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    background: rgba(255, 255, 255, 0.11);
+    backdrop-filter: blur(25px);
+    color: #fff;
+    display: none;
+}
+:global(.category-area-main-wrapper-one) :global(.swiper-button-next){
+    right: 80px;
+}
+:global(.category-area-main-wrapper-one) :global(.swiper-button-prev){
+    left: 80px;
+}
+:global(.category-area-main-wrapper-one) :global(.swiper-button-prev):after,
+:global(.category-area-main-wrapper-one) :global(.swiper-button-next):after {
+    font-size:20px !important
+}
+:global(.category-area-main-wrapper-one) :global(.swiper):hover :global(.swiper-button-next),
+:global(.category-area-main-wrapper-one) :global(.swiper):hover :global(.swiper-button-prev){
+    display: flex;
+}
+:global(.category-area-main-wrapper-one) :global(.swiper) :global(.swiper-button-next):hover,
+:global(.category-area-main-wrapper-one) :global(.swiper) :global(.swiper-button-prev):hover{
+    color: var(--color-primary);
+    background-color: white;
+}

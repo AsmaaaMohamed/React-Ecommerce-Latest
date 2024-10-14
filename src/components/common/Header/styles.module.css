@@ -1,0 +1,51 @@
+ /* Mid Header */
+ .categorySubMenu div {
+    color: #2C3C28;
+    transition: 0.3s;
+}
+/* searchHeader */
+.categorySearchWrapper :global(.border-b){
+    border-bottom: unset;
+}
+.logoSearchCategoryWrapper .categorySearchWrapper .searchHeader input {
+    width: 802px;
+    background: #F3F4F6;
+    padding-right: 150px;
+}
+.logoSearchCategoryWrapper .categorySearchWrapper .searchHeader button{
+    right: 5px;
+    height: 40px;
+    padding: 14px 25px;
+    gap:10px
+}
+
+/* categoryHoverHeader */
+
+.categoryHoverHeader:hover rect {
+    fill: #fff;
+}
+/* Header */
+.rtsHeaderOneAreaOne{
+    display: initial;
+}
+/* cart Hover card */
+:global(.pumpCartQuantity){
+    animation: pumpCartQuantity 300ms ease-out;
+}
+@keyframes pumpCartQuantity{
+    0%{
+        transform: scale(1);
+    }
+    20%{
+        transform: scale(.8);
+    }
+    30%{
+        transform: scale(1.1);
+    }
+    50%{
+        transform: scale(1.7);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
