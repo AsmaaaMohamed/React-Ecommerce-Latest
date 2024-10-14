@@ -8,15 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {SingleInputForm} from "@/components/common";
 import CartHoverCard from "./CartHoverCard";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useEffect } from "react";
-import actGetWishlist from "@/store/wishlist/act/actGetWishlist";
 import logoSvg from "@/assets/svg/logo-01.svg";
+import { useGetWishlistQuery } from "@/store/wishlist/api/wishlistApiSlice";
 
 const SearchHeader = () => {
-    const dispatch = useAppDispatch();
-    const {accessToken} = useAppSelector((state)=> state.auth);
-    const wishlistItemsQuantity = useAppSelector((state) => state.wishlist.itemsIds.length);
+    const {data:userWishlist} = useGetWishlistQuery("itemsIds");
     const searchForm = useForm<searchType>({
         resolver: zodResolver(searchFormSchema),
         defaultValues: {
@@ -26,10 +22,6 @@ const SearchHeader = () => {
       const onSubmit: SubmitHandler<searchType> = (data) => {
         // console.log(data);
       };
-      useEffect(()=>{
-        if(accessToken)
-          dispatch(actGetWishlist("itemsIds"));
-      },[dispatch, accessToken]);
   return (
     <div
       className={`hidden md-992:block py-[31px] border-t border-solid border-[#E2E2E2]`}
@@ -78,7 +70,7 @@ const SearchHeader = () => {
                     <div className={`relative`}>
                       <Heart size="18px" strokeWidth="1.5" />
                       <span className="absolute right-[-8px] top-[-10px] h-4 w-4 rounded-full text-[10px] bg-primary flex items-center justify-center text-white">
-                        {wishlistItemsQuantity}
+                        {userWishlist?.length ?? 0}
                       </span>
                     </div>
                     <span className="hidden lg-1200:inline">Wishlist</span>

@@ -52,7 +52,7 @@ export const columns: ColumnDef<TCart>[] = [
       return (
         <div className="price">
           <p className="text-secondary font-bold text-[15px]">
-            ${price.toFixed(2)}
+            ${price?.toFixed(2)}
           </p>
         </div>
       );
@@ -91,7 +91,7 @@ export const columns: ColumnDef<TCart>[] = [
       return (
         <div className="price">
           <p className="text-secondary font-bold text-[15px]">
-            ${(quantity * price).toFixed(2)}
+            ${(quantity * price)?.toFixed(2)}
           </p>
         </div>
       );

@@ -1,3 +1,4 @@
+import { useGetCartItemsInfoQuery } from "@/store/cart/api/cartApiSlice";
 import { cartClearAll, cartItemChangeQuantity, cartItemRemove } from "@/store/cart/cartSlice";
 import { getCartTotalQuantitySelector } from "@/store/cart/selectors/getCartTotalQuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
@@ -7,7 +8,9 @@ const useCart = () =>{
     const dispatch = useAppDispatch();
     const {items  } = useAppSelector((state)=>state.cart);
     const cartTotalQuantity = useAppSelector(getCartTotalQuantitySelector);
-    const placeOrderStatus = useAppSelector((state) => state.orders.loading);
+    // const [{isLoading}] = usePlaceOrderMutation();
+    const itemsIds = Object.keys(items);
+    const {data:cartItemsInfo} = useGetCartItemsInfoQuery(itemsIds);
     const removeItemHandler = useCallback(
       (id: number) => {
         dispatch(cartItemRemove(id));
@@ -26,6 +29,6 @@ const useCart = () =>{
       },
       [dispatch]
     );
-    return { items ,  removeItemHandler , cartClearAllHandler , changeQuantityHandler , cartTotalQuantity, placeOrderStatus};
+    return { items ,  removeItemHandler , cartClearAllHandler , changeQuantityHandler , cartTotalQuantity, cartItemsInfo};
 };
 export default useCart;

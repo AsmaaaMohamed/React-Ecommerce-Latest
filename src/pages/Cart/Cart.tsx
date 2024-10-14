@@ -9,25 +9,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { actPlaceOrder, resetOrderStatus } from "@/store/orders/ordersSlice";
-import { cartClearAll } from "@/store/cart/cartSlice";
 import { LottieHandler } from "@/components/feedback";
 import { toast } from "@/hooks/use-toast";
+import { usePlaceOrderMutation } from "@/store/orders/api/ordersApiSlice";
+import { cartApiSlice } from "@/store/cart/api/cartApiSlice";
+import { cartClearAll } from "@/store/cart/cartSlice";
 
 const Cart = () => {
-  const dispatch= useAppDispatch();
-  const {  removeItemHandler, cartClearAllHandler , placeOrderStatus} = useCart();
-  const {cartItemsInfo , items} = useAppSelector((state)=>state.cart);
+  const {  removeItemHandler, cartClearAllHandler, cartItemsInfo , items } = useCart();
+  const dispatch = useAppDispatch();
   const {accessToken} = useAppSelector((state)=>state.auth);
-  const cartItemsInfoWithQuantity = useMemo(()=>cartItemsInfo.map((el)=>({...el, quantity:items[el.id]})),[items, cartItemsInfo]);
+  const [placeOrder , {isLoading, isSuccess}] = usePlaceOrderMutation();
+  const cartItemsInfoWithQuantity = useMemo(()=>cartItemsInfo?.map((el)=>({...el, quantity:items[el.id]})),[items, cartItemsInfo]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const data = cartItemsInfoWithQuantity.map((item) => {
+  const data = cartItemsInfoWithQuantity?.map((item) => {
     return {
       product: {
         id: item.id,
@@ -38,8 +38,8 @@ const Cart = () => {
       price: item.price,
       quantity: item.quantity,
     };
-  });
-  const cartSubTotal = cartItemsInfoWithQuantity.reduce(
+  }) ?? [];
+  const cartSubTotal = cartItemsInfoWithQuantity?.reduce(
     (acc, el) => acc + (el.quantity ?? 0) * el.price,
     0
   );
@@ -64,23 +64,15 @@ const Cart = () => {
     }
   };
   const placeOrderHandler = () => {
-      setLoading(true);
-      dispatch(actPlaceOrder(cartSubTotal))
-        .unwrap()
-        .then(() => {
-          dispatch(cartClearAll());
-          setIsOpen(false);
-        })
-        .catch((error) => {
-          setError(error);
-        })
-        .finally(() => setLoading(false));
-    
-
+      placeOrder({cartItemsInfo, cartSubTotal, items}).unwrap().then(()=>{
+        setIsOpen(false);
+        dispatch(cartApiSlice.util.invalidateTags(['CartItemsInfo']));
+        dispatch(cartClearAll());
+      });
     }
-  useEffect(()=>{
-    dispatch(resetOrderStatus());
-  },[dispatch])
+  // useEffect(()=>{
+  //   dispatch(resetOrderStatus());
+  // },[dispatch])
   return (
     <div className="rts-cart-area rts-section-gap bg-[#F3F4F6] py-[60px]">
       <div className="container">
@@ -88,7 +80,7 @@ const Cart = () => {
           <div className="xl:w-3/4 md-992:w-full md:w-full w-full order-2 xl:order-1 md-992:order-2 md:order-2 sm:order-2 px-3 mt-12">
             <div className="rts-cart-list-area bg-white rounded-[6px]">
               <DataTable columns={columns} data={data} />
-              {placeOrderStatus === "succeed" && (
+              {isSuccess && (
                 <LottieHandler
                   message="Your order has been placed successfully"
                   type="success"
@@ -133,7 +125,7 @@ const Cart = () => {
                     Subtotal
                   </span>
                   <h6 className="price mb-0 text-[14px] font-bold text-secondary">
-                    ${cartSubTotal.toFixed(2)}
+                    ${cartSubTotal?.toFixed(2)}
                   </h6>
                 </div>
                 <div className="shipping flex items-start gap-[94px] py-[26px] px-[28px] border-b border-solid border-[#E2E2E2]">
@@ -195,7 +187,7 @@ const Cart = () => {
                 <div className="wrapper flex items-start gap-[96px] pt-[26px] pb-[15px] px-[28px]">
                   <span className="text-muted">Subtotal</span>
                   <h6 className="price text-[15px] text-secondary font-bold">
-                    ${cartSubTotal.toFixed(2)}
+                    ${cartSubTotal?.toFixed(2)}
                   </h6>
                 </div>
                 <div className="button-area pt-0 pb-[20px] px-[20px] w-full">
@@ -215,8 +207,8 @@ const Cart = () => {
                         <DialogDescription></DialogDescription>
                       </DialogHeader>
                       Are you sure you want to place order with Subtotal:{" "}
-                      {cartSubTotal.toFixed(2)} $
-                      {!loading && error && (
+                      {cartSubTotal?.toFixed(2)} $
+                      {!isLoading && error && (
                         <p style={{ color: "#DC3545", marginTop: "10px" }}>
                           {error}
                         </p>

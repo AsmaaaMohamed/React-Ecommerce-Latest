@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cart/cartSlice";
-import wishlistReducer from "./wishlist/wishlistSlice";
 import authReducer from "./auth/authSlice";
 import ordersReducer from "./orders/ordersSlice";
 import storage from "redux-persist/lib/storage";
 import {persistStore , persistReducer , FLUSH , REHYDRATE ,PAUSE ,PERSIST, PURGE , REGISTER} from "redux-persist"
 import { categoriesApiSlice } from "./categories/api/categoriesApiSlice";
 import { productsApiSlice } from "./products/api/productsApiSlice";
+import { wishlistApiSlice } from "./wishlist/api/wishlistApiSlice";
+import { ordersApiSlice } from "./orders/api/ordersApiSlice";
+import { cartApiSlice } from "./cart/api/cartApiSlice";
 
 const rootPersistConfig = {
   key: "root",
@@ -29,11 +31,12 @@ const cartPersistConfig ={
 
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
-  orders: ordersReducer,
+  [ordersApiSlice.reducerPath]: ordersApiSlice.reducer,
   [categoriesApiSlice.reducerPath]: categoriesApiSlice.reducer,
   [productsApiSlice.reducerPath]: productsApiSlice.reducer,
+  [cartApiSlice.reducerPath]: cartApiSlice.reducer,
   cart: persistReducer(cartPersistConfig, cartReducer),
-  wishlist: wishlistReducer,
+  [wishlistApiSlice.reducerPath]: wishlistApiSlice.reducer,
 });
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 const reduxPersistActions = [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER];
@@ -44,7 +47,11 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [...reduxPersistActions],
       },
-    }).concat(categoriesApiSlice.middleware).concat(productsApiSlice.middleware),
+    }).concat(categoriesApiSlice.middleware)
+      .concat(productsApiSlice.middleware)
+      .concat(wishlistApiSlice.middleware)
+      .concat(ordersApiSlice.middleware)
+      .concat(cartApiSlice.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

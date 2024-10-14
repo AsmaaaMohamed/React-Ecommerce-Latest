@@ -6,14 +6,15 @@ import { addToCart } from "@/store/cart/cartSlice";
 import { ShoppingCart } from "lucide-react";
 import { DataTable } from "../Cart/data-table";
 import { useCallback} from "react";
-import { actLikeToggle } from "@/store/wishlist/wishlistSlice";
+import { useLikeToggleMutation } from "@/store/wishlist/api/wishlistApiSlice";
 
 const Wishlist = () => {
   const { wishlistItemsWithQuantityAndLiked } = useWishlist();
   const dispatch = useAppDispatch();
+  const[likeToggle]=useLikeToggleMutation();
   const removeItemFromWishlist = useCallback((id:number)=>{
-    dispatch(actLikeToggle(id))
-  },[dispatch])
+    likeToggle(id);
+  },[])
   const addToCartHandler = (id:number) => {
     dispatch(addToCart(id));
   };
@@ -46,7 +47,7 @@ const Wishlist = () => {
       }];
   
   
-  const data = wishlistItemsWithQuantityAndLiked.map((item) => {
+  const data = wishlistItemsWithQuantityAndLiked?.map((item) => {
     return {
       product: {
         id: item.id,
@@ -57,7 +58,7 @@ const Wishlist = () => {
       price: item.price,
       quantity: item.quantity,
     };
-  });
+  })  ?? [];
   return (
     <div className="rts-cart-area rts-section-gap bg-[#F3F4F6] py-[60px]">
       <div className="container">

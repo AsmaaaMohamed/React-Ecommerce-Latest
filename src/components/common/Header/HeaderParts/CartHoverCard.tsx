@@ -9,15 +9,14 @@ import CartItemInMenu from "@/components/ecommerce/cart/CartItemInMenu/CartItemI
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import useCart from "@/hooks/useCart";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 import actGetCartItemsInfo from "@/store/cart/act/actGetCartItemsInfo";
 
 const CartHoverCard = () => {
   const dispatch = useAppDispatch();
   const [isAnimate, setIsAnimate] = useState(false);
   const pumpCartQuantityClass = isAnimate ? "pumpCartQuantity" : "";
-  const {cartTotalQuantity} = useCart();
-  const {cartItemsInfo , items} = useAppSelector((state)=>state.cart);
+  const {cartTotalQuantity, cartItemsInfo, items} = useCart();
    const cartItemsInfoWithQuantity = useMemo(()=>cartItemsInfo?.map((el)=>({...el, quantity:items[el.id]})),[items, cartItemsInfo]);
   const renderedCartItems = cartItemsInfoWithQuantity?.map((item, index) => {
     return <CartItemInMenu key={`${item.id}-${index}`} {...item} />;

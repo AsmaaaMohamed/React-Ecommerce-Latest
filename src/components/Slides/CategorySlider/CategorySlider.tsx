@@ -4,7 +4,7 @@ import { useGetCategoriesQuery } from "@/store/categories/api/categoriesApiSlice
 
 const CategorySlider = () => {
   const{data:categories} = useGetCategoriesQuery(undefined);
-  console.log(categories)
+  // console.log(categories)
   const renderedCategories =  categories?.map((category)=>{
     return (
       <Link

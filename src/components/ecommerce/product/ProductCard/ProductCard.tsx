@@ -2,16 +2,14 @@ import { Bookmark, Eye, Heart, ShoppingCart } from "lucide-react";
 import styles from "./styles.module.css";
 import { TProduct } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
-// import { addToCart } from "@/store/cart/cartSlice";
 import { Link } from "react-router-dom";
 import  { memo, useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-// import EditProductQuantity from "../EditProductQuantity/EditProductQuantity";
-import { actLikeToggle } from "@/store/wishlist/wishlistSlice";
 import ProductView from "../ProductView/ProductView";
 import { toast } from "@/hooks/use-toast";
 import { addToCart } from "@/store/cart/cartSlice";
 import EditProductQuantity from "../EditProductQuantity/EditProductQuantity";
+import { useLikeToggleMutation } from "@/store/wishlist/api/wishlistApiSlice";
 
 type TProductCard = TProduct & {
   cardBg: string;
@@ -39,7 +37,7 @@ const ProductCard = memo(
     const dispatch = useAppDispatch();
     const[isOpen , setIsOpen] = useState(false);
     const [isBtnDisabled, setIsBtnDisabled] = useState(false);
-    const [likeToggleLoad, setLikeToggleLoad] = useState(false);
+    const[likeToggle,{isLoading}]=useLikeToggleMutation();
     const remainingQuantityInStock = inStock - (quantity ?? 0);
     const reachingToMaxQuantity = remainingQuantityInStock <= 0 ? true : false;
     const addToCartLinkClass =
@@ -79,13 +77,8 @@ const ProductCard = memo(
       });
       return;
       }
-      if (!likeToggleLoad) {
-        setLikeToggleLoad(true);
-        dispatch(actLikeToggle(id))
-          .unwrap()
-          .then(() => setLikeToggleLoad(false))
-          .catch(() => setLikeToggleLoad(false));
-      }
+      likeToggle(id);
+
     };
     const viewProductHandler = ()=>{
       setIsOpen(true);
@@ -130,7 +123,7 @@ const ProductCard = memo(
                   }`}
                   onClick={likeToggleHandler}
                 >
-                  {likeToggleLoad ? (
+                  {isLoading ? (
                     <>
                       <LoadingSpinner size={20} color="#fff" />
                     </>
@@ -152,7 +145,7 @@ const ProductCard = memo(
                   <Eye color="#fff" size="20" strokeWidth="2.5" />
                 </div>
               </div>
-              <ProductView img={img} isLiked={isLiked} name={name} price={price} id={id} quantity={quantity} onClose={closeViewProductHandler} isOpen={isOpen} />
+              <ProductView img={img} isAuthenticated={isAuthenticated} isLiked={isLiked} name={name} price={price} id={id} quantity={quantity} onClose={closeViewProductHandler} isOpen={isOpen} />
             </>
           )}
         </div>

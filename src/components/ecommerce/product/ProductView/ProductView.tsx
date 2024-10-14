@@ -15,17 +15,17 @@ import { Facebook, Heart, Instagram, ShoppingCart, Twitter, Youtube } from "luci
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/cart/cartSlice";
-import { actLikeToggle } from "@/store/wishlist/wishlistSlice";
-import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import { useLikeToggleMutation } from "@/store/wishlist/api/wishlistApiSlice";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 type TProductView = TProduct & {
   isOpen:boolean;
   onClose:()=> void
 }
-const ProductView = ({id, name , price , img , isLiked , quantity , isAuthenticated= false,isOpen , onClose}:TProductView) => {
+const ProductView = ({id, name , price , img , isLiked , quantity , isAuthenticated,isOpen , onClose}:TProductView) => {
   const dispatch = useAppDispatch();
-  const [likeToggleLoad, setLikeToggleLoad] = useState(false);
+  const[likeToggle,{isLoading}]=useLikeToggleMutation();
   const addToCartHandler = (id:number) => {
     dispatch(addToCart(id));
   };
@@ -37,15 +37,8 @@ const ProductView = ({id, name , price , img , isLiked , quantity , isAuthentica
     });
     return;
     }
-    if (!likeToggleLoad) {
-      setLikeToggleLoad(true);
-      dispatch(actLikeToggle(id))
-        .unwrap()
-        .then(() => setLikeToggleLoad(false))
-        .catch(() => setLikeToggleLoad(false));
-    }
+    likeToggle(id);
   };
-  // console.log('producrviewwwwww' ,  quantity)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="lg:max-w-[1064px] sm:max-w-[425px] h-[520px] p-[30px]">
@@ -99,18 +92,22 @@ const ProductView = ({id, name , price , img , isLiked , quantity , isAuthentica
                       <i className="fa-regular fa-cart-shopping"></i>
                     </div>
                   </Button>
-                  <a
-                    href="#"
-                    className="rts-btn btn-primary ml-[20px] bg-primary block px-[25px] py-[14px] rounded-[6px]"
+                  <Button
+                    className="rts-btn btn-primary ml-[20px] bg-primary px-[25px] py-[14px] rounded-[6px] h-full"
                     onClick={(e)=> {e.preventDefault();likeToggleHandler()}}
                   >
+                    {isLoading ? (
+                    <>
+                      <LoadingSpinner size={20} color="#fff" />
+                    </>
+                  ) : (
                     <Heart
                       color={"#fff"}
                       fill={`${isLiked ? "#fff" : "none"}`}
                       size="20"
                       strokeWidth="2.5"
-                    />
-                  </a>
+                    />)}
+                  </Button>
                 </div>
                 <div className="product-uniques mb-[20px]">
                   <span className="sku product-unipue block text-muted mb-[5px]">
