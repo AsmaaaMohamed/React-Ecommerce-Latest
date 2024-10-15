@@ -7,7 +7,9 @@ const useProducts=()=>{
     const{data:products ,isLoading, error } = useGetProductsQuery(undefined);
     const cartItems = useAppSelector((state) => state.cart.items);
     const {data:wishListItemsIds} = useGetWishlistQuery("itemsIds");
-    const userAccessToken = useAppSelector((state)=>state.auth.accessToken);
+    const { accessToken: userAccessToken } = useAppSelector(
+      (state) => state.auth
+    );
     const productsWithQuantityAndLiked =  useMemo(()=>products?.map((el) => ({
       ...el,
       quantity: cartItems[el.id] ?? 0,

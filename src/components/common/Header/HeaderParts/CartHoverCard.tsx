@@ -9,11 +9,8 @@ import CartItemInMenu from "@/components/ecommerce/cart/CartItemInMenu/CartItemI
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import useCart from "@/hooks/useCart";
-import { useAppDispatch } from "@/store/hooks";
-import actGetCartItemsInfo from "@/store/cart/act/actGetCartItemsInfo";
 
 const CartHoverCard = () => {
-  const dispatch = useAppDispatch();
   const [isAnimate, setIsAnimate] = useState(false);
   const pumpCartQuantityClass = isAnimate ? "pumpCartQuantity" : "";
   const {cartTotalQuantity, cartItemsInfo, items} = useCart();
@@ -35,9 +32,7 @@ const CartHoverCard = () => {
     }, 300);
     return () => clearTimeout(debounce);
   }, [cartTotalQuantity]);
-  useEffect(()=>{
-        dispatch(actGetCartItemsInfo());
-    },[dispatch,cartTotalQuantity]);
+
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

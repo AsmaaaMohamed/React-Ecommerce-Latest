@@ -22,20 +22,13 @@ const cartSlice = createSlice({
       state.items[action.payload.id] = action.payload.quantity;
       if(action.payload.quantity === 0){
         delete state.items[action.payload.id];
-        // state.cartItemsInfo = state.cartItemsInfo.filter(
-        //   (el) => el.id !== action.payload.id
-        // );
       }
     },
     cartItemRemove: (state, action) => {
       delete state.items[action.payload];
-      // state.cartItemsInfo = state.cartItemsInfo.filter(
-      //   (el) => el.id !== action.payload
-      // );
     },
     cartClearAll: (state) => {
       state.items = {};
-      // state.cartItemsInfo = [];
     }
   },
 

@@ -1,4 +1,4 @@
-import { useGetCartItemsInfoQuery } from "@/store/cart/api/cartApiSlice";
+import { cartApiSlice, useGetCartItemsInfoQuery } from "@/store/cart/api/cartApiSlice";
 import { cartClearAll, cartItemChangeQuantity, cartItemRemove } from "@/store/cart/cartSlice";
 import { getCartTotalQuantitySelector } from "@/store/cart/selectors/getCartTotalQuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
@@ -25,6 +25,7 @@ const useCart = () =>{
     );
     const cartClearAllHandler = useCallback(
       () => {
+        dispatch(cartApiSlice.util.invalidateTags(["CartItemsInfo"]));
         dispatch(cartClearAll());
       },
       [dispatch]

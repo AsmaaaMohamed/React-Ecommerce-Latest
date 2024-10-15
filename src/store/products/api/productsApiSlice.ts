@@ -1,16 +1,14 @@
 import supabase from "@/services/supabase";
-import {createApi, fakeBaseQuery} from "@reduxjs/toolkit/query/react";
+import { storeApiSlice } from "../../storeApiSlice";
 
-export const productsApiSlice = createApi({
-  reducerPath: "products",
-  baseQuery: fakeBaseQuery(),
+export const productsApiSlice = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       queryFn: async () => {
         const { data, error } = await supabase.from("products").select("*");
 
         if (error) {
-          return { error }; // RTK Query expects errors to be returned, not thrown
+          throw error; // RTK Query expects errors to be returned, not thrown
         }
 
         return { data };
@@ -18,4 +16,4 @@ export const productsApiSlice = createApi({
     }),
   }),
 });
-export const {useGetProductsQuery} = productsApiSlice;
+export const { useGetProductsQuery } = productsApiSlice;

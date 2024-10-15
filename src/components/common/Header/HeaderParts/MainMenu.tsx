@@ -13,16 +13,30 @@ import { useToggleMenu } from "@/hooks/useToggleMenu";
 import { Link } from "react-router-dom";
 import MobileMenuPopup from "../../MobileMenuPopup/MobileMenuPopup";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { actAuthLogout } from "@/store/auth/authSlice";
 import logoSvg from "@/assets/svg/logo-01.svg"
+import {  useAuthLogoutMutation } from "@/store/auth/api/authApiSlice";
+import { toast } from "@/hooks/use-toast";
+import { setUser } from "@/store/auth/authSlice";
 
 const MainMenu = () => {
-  const dispatch = useAppDispatch();
   const { accessToken} = useAppSelector((state)=>state.auth);
+  const[authLogout,{error} ] = useAuthLogoutMutation();
+  const dispatch = useAppDispatch();
   const{onToggle} = useToggleMenu();
 
   const logoutHandler = ()=>{
-    dispatch(actAuthLogout());
+    authLogout(undefined).unwrap().then(()=>{
+      dispatch(setUser({user:null , accessToken:null}))
+    }).catch((error)=>{
+      console.log('eroooooooooor' , error);
+    toast({
+      variant: "destructive",
+      description: error?.message,
+    });
+    });
+  
+    
+  
   }
   
   return (

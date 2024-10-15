@@ -16,12 +16,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { LottieHandler } from "@/components/feedback";
 import { toast } from "@/hooks/use-toast";
 import { usePlaceOrderMutation } from "@/store/orders/api/ordersApiSlice";
-import { cartApiSlice } from "@/store/cart/api/cartApiSlice";
-import { cartClearAll } from "@/store/cart/cartSlice";
 
 const Cart = () => {
   const {  removeItemHandler, cartClearAllHandler, cartItemsInfo , items } = useCart();
-  const dispatch = useAppDispatch();
   const {accessToken} = useAppSelector((state)=>state.auth);
   const [placeOrder , {isLoading, isSuccess}] = usePlaceOrderMutation();
   const cartItemsInfoWithQuantity = useMemo(()=>cartItemsInfo?.map((el)=>({...el, quantity:items[el.id]})),[items, cartItemsInfo]);
@@ -66,13 +63,10 @@ const Cart = () => {
   const placeOrderHandler = () => {
       placeOrder({cartItemsInfo, cartSubTotal, items}).unwrap().then(()=>{
         setIsOpen(false);
-        dispatch(cartApiSlice.util.invalidateTags(['CartItemsInfo']));
-        dispatch(cartClearAll());
+        cartClearAllHandler();
       });
     }
-  // useEffect(()=>{
-  //   dispatch(resetOrderStatus());
-  // },[dispatch])
+
   return (
     <div className="rts-cart-area rts-section-gap bg-[#F3F4F6] py-[60px]">
       <div className="container">

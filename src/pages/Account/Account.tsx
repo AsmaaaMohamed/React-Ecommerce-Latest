@@ -6,10 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { actAuthLogout } from "@/store/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { LogOut, ShoppingBag, WalletMinimal } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
 import { ordersColumns } from "./ordersColumn";
 import { DataTable } from "../Cart/data-table";
 import { useState } from "react";
@@ -17,21 +15,30 @@ import { DialogDescription, DialogHeader,Dialog, DialogContent, DialogTitle } fr
 import CartItemInMenu from "@/components/ecommerce/cart/CartItemInMenu/CartItemInMenu";
 import { TProduct } from "@/types";
 import { useGetOrdersQuery } from "@/store/orders/api/ordersApiSlice";
+import { useAuthLogoutMutation } from "@/store/auth/api/authApiSlice";
+import { setUser } from "@/store/auth/authSlice";
+import { toast } from "@/hooks/use-toast";
 
 const Account = () => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const {user} = useAppSelector((state)=>state.auth);
   const{data:orderList}= useGetOrdersQuery(undefined);
+  const[authLogout,{error} ] = useAuthLogoutMutation();
   const[orderDetails , setOrderDetails] = useState<TProduct[]>([]);
-  const navigate = useNavigate();
   const modalHandler = ()=>{
     setIsOpen(!isOpen);
   }
   const logoutHandler = ()=>{
-    dispatch(actAuthLogout());
-    navigate('/');
-  }
+    authLogout(undefined).unwrap().then(()=>{
+      dispatch(setUser({user:null , accessToken:null}))
+    }).catch((error)=>{
+      // console.log('eroooooooooor' , error);
+    toast({
+      variant: "destructive",
+      description: error?.message,
+    });
+  })};
   const orderListWithSetter = orderList?.map((item)=>{
     return {
       id:item.id,

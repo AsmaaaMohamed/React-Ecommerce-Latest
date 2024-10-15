@@ -3,15 +3,19 @@ import { loginSchema, loginType } from "@/validations/loginSchema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { actAuthLogin, resetUI } from "@/store/auth/authSlice";
+import { setUser } from "@/store/auth/authSlice";
 import { useEffect } from "react";
 import { useToast } from "./use-toast";
+import { useAuthLoginMutation } from "@/store/auth/api/authApiSlice";
 
 const useLogin = ()=>{
     const [searchParams, setSearchParams] = useSearchParams();
     const {toast} = useToast();
     const dispatch = useAppDispatch();
-    const{error , loading, accessToken} = useAppSelector((state)=>state.auth)
+    const{ accessToken:userAccessToken} = useAppSelector((state)=>state.auth)
+    const[authLogin, { error , isLoading}] = useAuthLoginMutation();
+    let accessToken: string ='';
+    let user = {};
     const navigate = useNavigate();
     const form = useForm<loginType>({
         mode:"onBlur",
@@ -24,11 +28,21 @@ const useLogin = ()=>{
     const onSubmit:SubmitHandler<loginType> = async(values) => {
         // Do something with the form values.
         const { email , password} = values;
-        dispatch(actAuthLogin({ email , password}))
-        .unwrap()
-        .then(() => {
+        try{
+            const response = await authLogin({ email , password}).unwrap();
+            accessToken = response?.session.access_token ?? '';
+            user = {
+            id: response?.user.id,
+            email: response?.user.email,
+            username: response?.user.user_metadata.display_name,
+            } ;
+            // console.log(response)
+            dispatch(setUser({user, accessToken}));
             navigate("/");
-        });
+        }
+        catch(error){
+            // console.log(error)
+        }
     }
     useEffect(()=>{
         if(searchParams.get("message") === "account_created")
@@ -46,14 +60,11 @@ const useLogin = ()=>{
                 description: "You need to login to view this content",
             });
         }
-        return ()=>{
-        dispatch(resetUI());
-        }
-    },[toast , searchParams , dispatch , setSearchParams]);
+    },[toast , searchParams , setSearchParams]);
     return {
         error,
-        loading,
-        accessToken,
+        isLoading,
+        accessToken:userAccessToken,
         form,
         onSubmit
     };

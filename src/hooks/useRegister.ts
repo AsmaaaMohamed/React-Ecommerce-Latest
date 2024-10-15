@@ -10,7 +10,7 @@ import useCheckEmailAvailability from "./useCheckEmailAvailability";
 const useRegister=()=>{
     const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {loading , error , accessToken} = useAppSelector((state)=> state.auth)
+  const { accessToken} = useAppSelector((state)=> state.auth)
   const form = useForm<registerType>({
     mode:"onBlur",
     resolver: zodResolver(registerSchema),
@@ -52,6 +52,6 @@ const useRegister=()=>{
       dispatch(resetUI());
     }
   },[dispatch]);
-  return{error,loading,accessToken,form,onSubmit, emailAvailabilityStatus , emailOnBlurHandler}
+  return{accessToken,form,onSubmit, emailAvailabilityStatus , emailOnBlurHandler}
 }
 export default useRegister;
