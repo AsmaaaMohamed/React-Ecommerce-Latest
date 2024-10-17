@@ -19,7 +19,7 @@ export const authApiSlice = storeApiSlice.injectEndpoints({
 
         return { data };
       },
-      invalidatesTags: ["Wishlist"],
+      invalidatesTags: ["Wishlist","Orders"],
     }),
     getUser: builder.query({
       queryFn: async () => {

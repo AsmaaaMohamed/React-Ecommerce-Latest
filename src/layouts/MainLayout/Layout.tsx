@@ -10,6 +10,8 @@ const Layout = () => {
   useLayoutEffect(() => {
     document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [location.pathname]);
+  // const {data} = useGetUserQuery(undefined);
+  // console.log (data)
   return (
     <>
       <Header />

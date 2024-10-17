@@ -29,6 +29,7 @@ export const ordersApiSlice = storeApiSlice.injectEndpoints({
         });
         return { data: items };
       },
+      providesTags: ["Orders"],
     }),
     placeOrder: builder.mutation({
       queryFn: async ({
