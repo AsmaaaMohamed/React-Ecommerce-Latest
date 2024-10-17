@@ -24,18 +24,19 @@ const MainMenu = () => {
   const dispatch = useAppDispatch();
   const{onToggle} = useToggleMenu();
 
-  const logoutHandler = ()=>{
-    authLogout(undefined).unwrap().then(()=>{
-      dispatch(setUser({user:null , accessToken:null}))
-    }).catch((error)=>{
-      console.log('eroooooooooor' , error);
-    toast({
-      variant: "destructive",
-      description: error?.message,
-    });
-    });
-  
-    
+  const logoutHandler = async()=>{
+      authLogout(undefined)
+        .unwrap()
+        .then(() => {
+          dispatch(setUser({ user: null, accessToken: null }));
+        })
+        .catch((error) => {
+          console.log("eroooooooooor", error);
+          toast({
+            variant: "destructive",
+            description: error?.message,
+          });
+        });
   
   }
   

@@ -15,9 +15,10 @@ import { DialogDescription, DialogHeader,Dialog, DialogContent, DialogTitle } fr
 import CartItemInMenu from "@/components/ecommerce/cart/CartItemInMenu/CartItemInMenu";
 import { TProduct } from "@/types";
 import { useGetOrdersQuery } from "@/store/orders/api/ordersApiSlice";
-import { useAuthLogoutMutation } from "@/store/auth/api/authApiSlice";
+import { useAuthLogoutMutation} from "@/store/auth/api/authApiSlice";
 import { setUser } from "@/store/auth/authSlice";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const dispatch = useAppDispatch();
@@ -30,15 +31,19 @@ const Account = () => {
     setIsOpen(!isOpen);
   }
   const logoutHandler = ()=>{
-    authLogout(undefined).unwrap().then(()=>{
-      dispatch(setUser({user:null , accessToken:null}))
-    }).catch((error)=>{
-      // console.log('eroooooooooor' , error);
-    toast({
-      variant: "destructive",
-      description: error?.message,
-    });
-  })};
+      authLogout(undefined)
+        .unwrap()
+        .then(() => {
+          dispatch(setUser({ user: null, accessToken: null }));
+        })
+        .catch((error) => {
+          // console.log('eroooooooooor' , error);
+          toast({
+            variant: "destructive",
+            description: error?.message,
+          });
+        });
+  };
   const orderListWithSetter = orderList?.map((item)=>{
     return {
       id:item.id,

@@ -5,6 +5,6 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 export const storeApiSlice = createApi({
   reducerPath: "StoreApi",
   baseQuery: fakeBaseQuery(),
-  tagTypes: ["Wishlist", "CartItemsInfo", "Orders"],
+  tagTypes: ["Wishlist", "CartItemsInfo", "Orders", "User"],
   endpoints: () => ({}),
 });

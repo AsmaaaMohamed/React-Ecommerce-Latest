@@ -19,14 +19,7 @@ export const authApiSlice = storeApiSlice.injectEndpoints({
 
         return { data };
       },
-      invalidatesTags: ["Wishlist","Orders"],
-    }),
-    getUser: builder.query({
-      queryFn: async () => {
-        const { data } = await supabase.auth.getUser();
-        // console.log(data);
-        return { data };
-      }, // This should return the currently logged-in user
+      invalidatesTags: ["Wishlist","Orders","User"],
     }),
     authLogout: builder.mutation({
       queryFn: async () => {
@@ -36,8 +29,8 @@ export const authApiSlice = storeApiSlice.injectEndpoints({
         }
         return { data: null };
       },
-      invalidatesTags: ["Wishlist"],
+      invalidatesTags: ["Wishlist", "User"],
     }),
   }),
 });
-export const { useAuthLoginMutation, useGetUserQuery, useAuthLogoutMutation } =  authApiSlice;
+export const { useAuthLoginMutation, useAuthLogoutMutation } =  authApiSlice;
