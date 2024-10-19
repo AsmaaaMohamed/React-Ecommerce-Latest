@@ -19,6 +19,9 @@ const Login = () => {
                 <h3 className="title animate-in fade-in-0 font-bold text-[26px] leading-[54px] text-secondary">
                   Login Into Your Account
                 </h3>
+                <small className="text-gray-500">email: user@example.com</small>
+                <br />
+                <small className="text-gray-500">password: 123456</small>
                 <LoginForm />
               </div>
             </div>
